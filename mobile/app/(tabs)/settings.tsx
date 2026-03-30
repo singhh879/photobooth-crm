@@ -7,17 +7,15 @@ import { useSettings } from '../../hooks/useSettings';
 export default function SettingsScreen() {
   const { settings, save } = useSettings();
   const [userChatId, setUserChatId] = useState('');
-  const [bossChatId, setBossChatId] = useState('');
   const [briefingTime, setBriefingTime] = useState('');
 
   React.useEffect(() => {
     setUserChatId(settings.user_telegram_chat_id || '');
-    setBossChatId(settings.boss_telegram_chat_id || '');
     setBriefingTime(settings.briefing_time || '09:00');
   }, [settings]);
 
   const handleSave = async () => {
-    await save({ user_telegram_chat_id: userChatId, boss_telegram_chat_id: bossChatId, briefing_time: briefingTime });
+    await save({ user_telegram_chat_id: userChatId, briefing_time: briefingTime });
     Alert.alert('Saved', 'Settings updated.');
   };
 
@@ -32,9 +30,6 @@ export default function SettingsScreen() {
           <TextInput style={styles.input} value={userChatId} onChangeText={setUserChatId} placeholder="e.g. 123456789" keyboardType="numeric" />
           <Text style={styles.hint}>Message @userinfobot on Telegram to get your chat ID.</Text>
 
-          <Text style={[styles.label, { marginTop: 16 }]}>Boss's Telegram Chat ID</Text>
-          <TextInput style={styles.input} value={bossChatId} onChangeText={setBossChatId} placeholder="e.g. 987654321" keyboardType="numeric" />
-          <Text style={styles.hint}>Boss must start a chat with the bot first.</Text>
         </View>
 
         <Text style={styles.section}>Daily Briefing</Text>

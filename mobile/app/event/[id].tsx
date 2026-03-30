@@ -18,7 +18,6 @@ export default function EventDetail() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const [event, setEvent] = useState<Event | null>(null);
   const [loading, setLoading] = useState(true);
-  const [sending, setSending] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showFromPicker, setShowFromPicker] = useState(false);
   const [showToPicker, setShowToPicker] = useState(false);
@@ -46,16 +45,6 @@ export default function EventDetail() {
     await loadEvent();
   };
 
-  const sendToBoss = async () => {
-    setSending(true);
-    try {
-      await api.post('/notify/send-to-boss', { event_id: id });
-      Alert.alert('Sent!', 'Summary sent to boss on Telegram.');
-    } catch {
-      Alert.alert('Error', 'Could not send. Check Telegram settings.');
-    } finally { setSending(false); }
-  };
-
   if (loading || !event) return <ActivityIndicator style={{ flex: 1 }} color="#6C63FF" />;
 
   const selectedTeamIds = event.event_team?.map(t => t.team_members?.id).filter(Boolean) as string[] || [];
@@ -70,10 +59,6 @@ export default function EventDetail() {
           <Ionicons name="arrow-back" size={22} color="#111" />
         </TouchableOpacity>
         <Text style={styles.title} numberOfLines={1}>{event.client_name || 'Event Detail'}</Text>
-        <TouchableOpacity style={styles.bossBtn} onPress={sendToBoss} disabled={sending}>
-          <Ionicons name="paper-plane" size={18} color="#fff" />
-          <Text style={styles.bossBtnText}>{sending ? '...' : 'Boss'}</Text>
-        </TouchableOpacity>
       </View>
 
       <ScrollView contentContainerStyle={styles.scroll}>
@@ -185,8 +170,6 @@ const styles = StyleSheet.create({
   topBar: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12, backgroundColor: '#fff', borderBottomWidth: 1, borderBottomColor: '#EEE' },
   back: { marginRight: 10 },
   title: { flex: 1, fontSize: 17, fontWeight: '600', color: '#111' },
-  bossBtn: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#6C63FF', paddingHorizontal: 12, paddingVertical: 7, borderRadius: 20, gap: 5 },
-  bossBtnText: { color: '#fff', fontWeight: '600', fontSize: 13 },
   scroll: { padding: 16, paddingBottom: 60 },
   section: { fontSize: 11, fontWeight: '700', color: '#AAA', textTransform: 'uppercase', letterSpacing: 1, marginTop: 20, marginBottom: 8, marginLeft: 4 },
   card: { backgroundColor: '#fff', borderRadius: 14, paddingHorizontal: 16, marginBottom: 4 },
