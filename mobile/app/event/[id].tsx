@@ -159,7 +159,7 @@ export default function EventDetail() {
               ))}
             </View>
           </View>
-          <TeamChecklist label="Team" members={members} selectedIds={selectedTeamIds} onSave={updateTeam} />
+          <TeamChecklist label="Team" members={members.filter(m => !m.archived)} selectedIds={selectedTeamIds} onSave={updateTeam} />
         </View>
 
         {/* Financials */}

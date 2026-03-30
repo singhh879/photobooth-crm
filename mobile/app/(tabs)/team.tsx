@@ -34,7 +34,7 @@ export default function TeamScreen() {
         </TouchableOpacity>
       </View>
       <FlatList
-        data={members}
+        data={members.filter(m => !m.archived)}
         keyExtractor={m => m.id}
         renderItem={({ item }) => (
           <View style={styles.card}>
