@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: process.env.EXPO_PUBLIC_BACKEND_URL || 'http://localhost:3000',
-  timeout: 10000,
+  baseURL: process.env.EXPO_PUBLIC_BACKEND_URL || 'https://photobooth-crm.onrender.com',
+  timeout: 15000,
 });
 
 export default api;

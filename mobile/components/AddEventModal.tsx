@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal, View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import { Modal, View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { CITIES } from '../constants/cities';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 
@@ -29,7 +29,7 @@ export default function AddEventModal({ visible, onClose, onSave }: Props) {
 
   return (
     <Modal visible={visible} animationType="slide" transparent onRequestClose={onClose}>
-      <View style={styles.overlay}>
+      <KeyboardAvoidingView style={styles.overlay} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <View style={styles.sheet}>
           <Text style={styles.heading}>New Event</Text>
 
@@ -69,7 +69,7 @@ export default function AddEventModal({ visible, onClose, onSave }: Props) {
             </TouchableOpacity>
           </View>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </Modal>
   );
 }
