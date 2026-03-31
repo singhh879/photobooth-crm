@@ -7,15 +7,13 @@ import { useSettings } from '../../hooks/useSettings';
 export default function SettingsScreen() {
   const { settings, save } = useSettings();
   const [userChatId, setUserChatId] = useState('');
-  const [briefingTime, setBriefingTime] = useState('');
 
   React.useEffect(() => {
     setUserChatId(settings.user_telegram_chat_id || '');
-    setBriefingTime(settings.briefing_time || '09:00');
   }, [settings]);
 
   const handleSave = async () => {
-    await save({ user_telegram_chat_id: userChatId, briefing_time: briefingTime });
+    await save({ user_telegram_chat_id: userChatId });
     Alert.alert('Saved', 'Settings updated.');
   };
 
@@ -29,14 +27,6 @@ export default function SettingsScreen() {
           <Text style={styles.label}>Your Telegram Chat ID</Text>
           <TextInput style={styles.input} value={userChatId} onChangeText={setUserChatId} placeholder="e.g. 123456789" keyboardType="numeric" />
           <Text style={styles.hint}>Message @userinfobot on Telegram to get your chat ID.</Text>
-
-        </View>
-
-        <Text style={styles.section}>Daily Briefing</Text>
-        <View style={styles.card}>
-          <Text style={styles.label}>Briefing Time (IST, 24h format)</Text>
-          <TextInput style={styles.input} value={briefingTime} onChangeText={setBriefingTime} placeholder="09:00" />
-          <Text style={styles.hint}>Update cron-job.org to match this time in IST.</Text>
         </View>
 
         <TouchableOpacity style={styles.saveBtn} onPress={handleSave}>
