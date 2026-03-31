@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Switch, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Switch, ActivityIndicator } from 'react-native';
 import { useLocalSearchParams, router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import api from '../../lib/api';
+import db from '../../lib/supabase';
 import { Event } from '../../hooks/useEvents';
 import { useTeam } from '../../hooks/useTeam';
 import { useDropdownOptions } from '../../hooks/useDropdownOptions';
@@ -28,20 +28,27 @@ export default function EventDetail() {
 
   const loadEvent = useCallback(async () => {
     setLoading(true);
-    const res = await api.get(`/events/${id}`);
-    setEvent(res.data);
-    setLoading(false);
+    try {
+      const { data } = await db.get(`/events?id=eq.${id}&select=*,event_team(team_member_id,team_members(id,name))&limit=1`);
+      setEvent(data?.[0] || null);
+    } finally {
+      setLoading(false);
+    }
   }, [id]);
 
   useEffect(() => { loadEvent(); }, [loadEvent]);
 
   const update = async (patch: Partial<Event>) => {
-    await api.patch(`/events/${id}`, patch);
+    await db.patch(`/events?id=eq.${id}`, patch);
     setEvent(e => e ? { ...e, ...patch } : e);
   };
 
   const updateTeam = async (memberIds: string[]) => {
-    await api.patch(`/events/${id}/team`, { member_ids: memberIds });
+    await db.delete(`/event_team?event_id=eq.${id}`);
+    if (memberIds.length > 0) {
+      const rows = memberIds.map(mid => ({ event_id: id, team_member_id: mid }));
+      await db.post('/event_team', rows);
+    }
     await loadEvent();
   };
 
@@ -63,7 +70,6 @@ export default function EventDetail() {
 
       <ScrollView contentContainerStyle={styles.scroll}>
 
-        {/* Enquiry */}
         <Text style={styles.section}>Enquiry</Text>
         <View style={styles.card}>
           <View style={styles.row}>
@@ -88,7 +94,6 @@ export default function EventDetail() {
           </View>
         </View>
 
-        {/* Event Details */}
         <Text style={styles.section}>Event Details</Text>
         <View style={styles.card}>
           <TouchableOpacity style={styles.fieldRow} onPress={() => setShowDatePicker(true)}>
@@ -116,14 +121,12 @@ export default function EventDetail() {
           )}
         </View>
 
-        {/* Point of Contact */}
         <Text style={styles.section}>Point of Contact</Text>
         <View style={styles.card}>
           <FieldRow label="Name" value={event.poc_name} onSave={v => update({ poc_name: v })} />
           <FieldRow label="Number" value={event.poc_number} onSave={v => update({ poc_number: v })} keyboardType="phone-pad" isPhone />
         </View>
 
-        {/* Setup */}
         <Text style={styles.section}>Setup</Text>
         <View style={styles.card}>
           <CustomDropdown label="Photobooth Type" value={event.photobooth_type} options={photoboothOptions} onSelect={v => update({ photobooth_type: v })} onAddCustom={addPhotoboothOption} />
@@ -131,7 +134,6 @@ export default function EventDetail() {
           <FieldRow label="No. of Prints" value={event.num_prints?.toString() || null} onSave={v => update({ num_prints: parseInt(v) || null })} keyboardType="numeric" />
         </View>
 
-        {/* Execution */}
         <Text style={styles.section}>Execution</Text>
         <View style={styles.card}>
           <View style={styles.fieldRow}>
@@ -147,7 +149,6 @@ export default function EventDetail() {
           <TeamChecklist label="Team" members={members.filter(m => !m.archived)} selectedIds={selectedTeamIds} onSave={updateTeam} />
         </View>
 
-        {/* Financials */}
         <Text style={styles.section}>Financials</Text>
         <View style={styles.card}>
           <View style={styles.switchRow}>
