@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { supabase } from '../lib/supabase';
+import db from '../lib/supabase';
 
 export interface Event {
   id: string;
@@ -29,13 +29,9 @@ export function useEvents(city?: string) {
   const loadEvents = useCallback(async () => {
     setLoading(true);
     try {
-      let query = supabase
-        .from('events')
-        .select('*, event_team(team_member_id, team_members(id, name))')
-        .order('event_date', { ascending: true });
-      if (city && city !== 'All') query = query.eq('city', city);
-      const { data, error: err } = await query;
-      if (err) throw err;
+      let url = '/events?select=*,event_team(team_member_id,team_members(id,name))&order=event_date.asc';
+      if (city && city !== 'All') url += `&city=eq.${city}`;
+      const { data } = await db.get(url);
       setEvents(data || []);
     } catch (e: any) {
       setError(e.message);
@@ -47,31 +43,27 @@ export function useEvents(city?: string) {
   useEffect(() => { loadEvents(); }, [loadEvents]);
 
   const createEvent = async (payload: Partial<Event>) => {
-    const { data, error: err } = await supabase.from('events').insert(payload).select().single();
-    if (err) throw err;
+    const { data } = await db.post('/events', payload, { headers: { Prefer: 'return=representation' } });
     await loadEvents();
-    return data;
+    return data[0];
   };
 
   const updateEvent = async (id: string, payload: Partial<Event>) => {
-    const { error: err } = await supabase.from('events').update(payload).eq('id', id);
-    if (err) throw err;
+    await db.patch(`/events?id=eq.${id}`, payload);
     await loadEvents();
   };
 
   const updateTeam = async (id: string, member_ids: string[]) => {
-    await supabase.from('event_team').delete().eq('event_id', id);
+    await db.delete(`/event_team?event_id=eq.${id}`);
     if (member_ids.length > 0) {
       const rows = member_ids.map(mid => ({ event_id: id, team_member_id: mid }));
-      const { error: insErr } = await supabase.from('event_team').insert(rows);
-      if (insErr) throw insErr;
+      await db.post('/event_team', rows);
     }
     await loadEvents();
   };
 
   const deleteEvent = async (id: string) => {
-    const { error: err } = await supabase.from('events').delete().eq('id', id);
-    if (err) throw err;
+    await db.delete(`/events?id=eq.${id}`);
     await loadEvents();
   };
 
