@@ -25,8 +25,8 @@ export default function AddEventModal({ visible, onClose, onSave }: Props) {
     try {
       await onSave({ status, city, client_name: clientName.trim(), event_date: date!.toISOString().split('T')[0] });
       setClientName(''); setDate(null); setStatus('soft_block'); setCity('Delhi');
-    } catch (e) {
-      Alert.alert('Error', 'Could not save event. Please try again.');
+    } catch (e: any) {
+      Alert.alert('Error', e?.message || e?.toString() || 'Unknown error');
     } finally {
       setSaving(false);
     }
