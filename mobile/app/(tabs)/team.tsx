@@ -14,8 +14,14 @@ export default function TeamScreen() {
   const handleAdd = async () => {
     if (!name.trim()) return;
     setSaving(true);
-    await addMember(name.trim(), phone.trim() || undefined);
-    setName(''); setPhone(''); setShowAdd(false); setSaving(false);
+    try {
+      await addMember(name.trim(), phone.trim() || undefined);
+      setName(''); setPhone(''); setShowAdd(false);
+    } catch (e) {
+      Alert.alert('Error', 'Could not add member. Please try again.');
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleArchive = (member: TeamMember) => {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal, View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import { Modal, View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, KeyboardAvoidingView, Platform, Alert } from 'react-native';
 import { CITIES } from '../constants/cities';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 
@@ -22,9 +22,14 @@ export default function AddEventModal({ visible, onClose, onSave }: Props) {
   const handleSave = async () => {
     if (!canSave) return;
     setSaving(true);
-    await onSave({ status, city, client_name: clientName.trim(), event_date: date!.toISOString().split('T')[0] });
-    setSaving(false);
-    setClientName(''); setDate(null); setStatus('soft_block'); setCity('Delhi');
+    try {
+      await onSave({ status, city, client_name: clientName.trim(), event_date: date!.toISOString().split('T')[0] });
+      setClientName(''); setDate(null); setStatus('soft_block'); setCity('Delhi');
+    } catch (e) {
+      Alert.alert('Error', 'Could not save event. Please try again.');
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
