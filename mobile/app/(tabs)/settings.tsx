@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
   label: { fontSize: 13, fontWeight: '600', color: '#555', marginBottom: 6 },
   input: { backgroundColor: '#F5F5F5', borderRadius: 10, padding: 12, fontSize: 15, marginBottom: 4 },
   hint: { fontSize: 11, color: '#BBB', marginTop: 2 },
-  saveBtn: { backgroundColor: '#6C63FF', borderRadius: 14, padding: 16, alignItems: 'center', marginTop: 24 },
+  saveBtn: { backgroundColor: '#22C55E', borderRadius: 14, padding: 16, alignItems: 'center', marginTop: 24 },
   saveBtnText: { color: '#fff', fontWeight: '700', fontSize: 16 },
   version: { textAlign: 'center', color: '#CCC', fontSize: 12, marginTop: 32 },
 });

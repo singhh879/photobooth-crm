@@ -45,7 +45,7 @@ export default function EventDetail() {
     await loadEvent();
   };
 
-  if (loading || !event) return <ActivityIndicator style={{ flex: 1 }} color="#6C63FF" />;
+  if (loading || !event) return <ActivityIndicator style={{ flex: 1 }} color="#22C55E" />;
 
   const selectedTeamIds = event.event_team?.map(t => t.team_members?.id).filter(Boolean) as string[] || [];
 
@@ -152,7 +152,7 @@ export default function EventDetail() {
         <View style={styles.card}>
           <View style={styles.switchRow}>
             <Text style={styles.fieldLabel}>Invoice Raised</Text>
-            <Switch value={event.invoice_raised} onValueChange={v => update({ invoice_raised: v })} trackColor={{ true: '#6C63FF' }} />
+            <Switch value={event.invoice_raised} onValueChange={v => update({ invoice_raised: v })} trackColor={{ true: '#22C55E' }} />
           </View>
           <View style={[styles.switchRow, { borderBottomWidth: 0 }]}>
             <Text style={styles.fieldLabel}>Payment Received</Text>
@@ -180,11 +180,11 @@ const styles = StyleSheet.create({
   placeholder: { color: '#BBB' },
   toggle: { flexDirection: 'row', gap: 6 },
   toggleOpt: { paddingHorizontal: 10, paddingVertical: 5, borderRadius: 8, backgroundColor: '#F0F0F0' },
-  toggleActive: { backgroundColor: '#6C63FF' },
+  toggleActive: { backgroundColor: '#22C55E' },
   toggleText: { fontSize: 12, color: '#555' },
   toggleTextActive: { color: '#fff', fontWeight: '600' },
   chip: { paddingHorizontal: 12, paddingVertical: 5, borderRadius: 16, backgroundColor: '#F0F0F0', marginRight: 6 },
-  chipActive: { backgroundColor: '#6C63FF' },
+  chipActive: { backgroundColor: '#22C55E' },
   chipText: { fontSize: 12, color: '#555' },
   chipTextActive: { color: '#fff', fontWeight: '600' },
   switchRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: '#F0F0F0' },

@@ -27,7 +27,7 @@ export default function CityFilter({ selected, onSelect }: Props) {
 const styles = StyleSheet.create({
   container: { paddingHorizontal: 16, paddingVertical: 10 },
   chip: { paddingHorizontal: 14, paddingVertical: 6, borderRadius: 20, backgroundColor: '#F0F0F0', marginRight: 8 },
-  chipActive: { backgroundColor: '#6C63FF' },
+  chipActive: { backgroundColor: '#22C55E' },
   chipText: { fontSize: 13, color: '#555' },
   chipTextActive: { color: '#fff', fontWeight: '600' },
 });

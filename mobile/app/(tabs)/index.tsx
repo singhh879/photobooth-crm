@@ -27,7 +27,7 @@ export default function EventsScreen() {
       <Text style={styles.title}>Events</Text>
       <CityFilter selected={city} onSelect={setCity} />
       {loading ? (
-        <ActivityIndicator style={{ marginTop: 40 }} color="#6C63FF" />
+        <ActivityIndicator style={{ marginTop: 40 }} color="#22C55E" />
       ) : (
         <FlatList
           data={showPast ? [...upcoming, ...past] : upcoming}
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#F5F5F5' },
   title: { fontSize: 24, fontWeight: '700', paddingHorizontal: 16, paddingTop: 8, color: '#111' },
   empty: { textAlign: 'center', color: '#AAA', marginTop: 60, fontSize: 14 },
-  fab: { position: 'absolute', bottom: 24, right: 24, width: 56, height: 56, borderRadius: 28, backgroundColor: '#6C63FF', alignItems: 'center', justifyContent: 'center', elevation: 6 },
+  fab: { position: 'absolute', bottom: 24, right: 24, width: 56, height: 56, borderRadius: 28, backgroundColor: '#22C55E', alignItems: 'center', justifyContent: 'center', elevation: 6 },
   pastToggle: { alignItems: 'center', paddingVertical: 16 },
-  pastToggleText: { color: '#6C63FF', fontSize: 13 },
+  pastToggleText: { color: '#22C55E', fontSize: 13 },
 });

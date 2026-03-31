@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
   badgeText: { fontSize: 11, fontWeight: '600', color: '#555' },
   sub: { fontSize: 12, color: '#888', marginBottom: 10 },
   progressBg: { height: 4, backgroundColor: '#EFEFEF', borderRadius: 2, marginBottom: 8 },
-  progressFill: { height: 4, backgroundColor: '#6C63FF', borderRadius: 2 },
+  progressFill: { height: 4, backgroundColor: '#22C55E', borderRadius: 2 },
   footer: { flexDirection: 'row', justifyContent: 'space-between' },
   footerText: { fontSize: 11, color: '#AAA' },
   checks: { flexDirection: 'row', gap: 6 },

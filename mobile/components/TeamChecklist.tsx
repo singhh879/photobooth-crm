@@ -69,10 +69,10 @@ const styles = StyleSheet.create({
   heading: { fontSize: 17, fontWeight: '700', marginBottom: 16 },
   member: { flexDirection: 'row', alignItems: 'center', paddingVertical: 12, gap: 12, borderBottomWidth: 1, borderBottomColor: '#F5F5F5' },
   checkbox: { width: 22, height: 22, borderRadius: 6, borderWidth: 2, borderColor: '#DDD', alignItems: 'center', justifyContent: 'center' },
-  checkboxActive: { backgroundColor: '#6C63FF', borderColor: '#6C63FF' },
+  checkboxActive: { backgroundColor: '#22C55E', borderColor: '#22C55E' },
   memberName: { fontSize: 15, color: '#111', fontWeight: '500' },
   memberPhone: { fontSize: 12, color: '#AAA', marginTop: 1 },
   empty: { color: '#AAA', textAlign: 'center', paddingVertical: 24, fontSize: 13 },
-  saveBtn: { backgroundColor: '#6C63FF', borderRadius: 12, padding: 14, alignItems: 'center', marginTop: 16 },
+  saveBtn: { backgroundColor: '#22C55E', borderRadius: 12, padding: 14, alignItems: 'center', marginTop: 16 },
   saveBtnText: { color: '#fff', fontWeight: '700', fontSize: 15 },
 });

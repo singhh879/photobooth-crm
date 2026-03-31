@@ -41,7 +41,7 @@ export default function CustomDropdown({ label, value, options, onSelect, onAddC
               renderItem={({ item }) => (
                 <TouchableOpacity style={styles.option} onPress={() => { onSelect(item); setOpen(false); }}>
                   <Text style={[styles.optionText, value === item && styles.optionSelected]}>{item}</Text>
-                  {value === item && <Ionicons name="checkmark" size={16} color="#6C63FF" />}
+                  {value === item && <Ionicons name="checkmark" size={16} color="#22C55E" />}
                 </TouchableOpacity>
               )}
             />
@@ -69,9 +69,9 @@ const styles = StyleSheet.create({
   heading: { fontSize: 17, fontWeight: '700', marginBottom: 16 },
   option: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 13, borderBottomWidth: 1, borderBottomColor: '#F5F5F5' },
   optionText: { fontSize: 15, color: '#333' },
-  optionSelected: { color: '#6C63FF', fontWeight: '600' },
+  optionSelected: { color: '#22C55E', fontWeight: '600' },
   customRow: { flexDirection: 'row', gap: 10, marginTop: 16 },
   customInput: { flex: 1, backgroundColor: '#F5F5F5', borderRadius: 10, padding: 10, fontSize: 14 },
-  addBtn: { backgroundColor: '#6C63FF', borderRadius: 10, paddingHorizontal: 16, justifyContent: 'center' },
+  addBtn: { backgroundColor: '#22C55E', borderRadius: 10, paddingHorizontal: 16, justifyContent: 'center' },
   addBtnText: { color: '#fff', fontWeight: '700' },
 });
