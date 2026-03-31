@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import api from '../lib/api';
+import { supabase } from '../lib/supabase';
 
 export interface Settings {
   user_telegram_chat_id: string;
@@ -10,14 +10,20 @@ export function useSettings() {
   const [settings, setSettings] = useState<Settings>({ user_telegram_chat_id: '', briefing_time: '09:00' });
 
   const loadSettings = useCallback(async () => {
-    const res = await api.get('/settings');
-    setSettings(s => ({ ...s, ...res.data }));
+    const { data } = await supabase.from('settings').select('*');
+    if (data) {
+      const cfg: any = {};
+      data.forEach((row: any) => { cfg[row.key] = row.value; });
+      setSettings(s => ({ ...s, ...cfg }));
+    }
   }, []);
 
   useEffect(() => { loadSettings(); }, [loadSettings]);
 
   const save = async (patch: Partial<Settings>) => {
-    await api.patch('/settings', patch);
+    const upserts = Object.entries(patch).map(([key, value]) => ({ key, value }));
+    const { error } = await supabase.from('settings').upsert(upserts, { onConflict: 'key' });
+    if (error) throw error;
     setSettings(s => ({ ...s, ...patch }));
   };
 

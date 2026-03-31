@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import api from '../lib/api';
+import { supabase } from '../lib/supabase';
 
 export interface Event {
   id: string;
@@ -29,9 +29,14 @@ export function useEvents(city?: string) {
   const loadEvents = useCallback(async () => {
     setLoading(true);
     try {
-      const params = city && city !== 'All' ? { city } : {};
-      const res = await api.get('/events', { params });
-      setEvents(res.data);
+      let query = supabase
+        .from('events')
+        .select('*, event_team(team_member_id, team_members(id, name))')
+        .order('event_date', { ascending: true });
+      if (city && city !== 'All') query = query.eq('city', city);
+      const { data, error: err } = await query;
+      if (err) throw err;
+      setEvents(data || []);
     } catch (e: any) {
       setError(e.message);
     } finally {
@@ -42,23 +47,31 @@ export function useEvents(city?: string) {
   useEffect(() => { loadEvents(); }, [loadEvents]);
 
   const createEvent = async (payload: Partial<Event>) => {
-    const res = await api.post('/events', payload);
+    const { data, error: err } = await supabase.from('events').insert(payload).select().single();
+    if (err) throw err;
     await loadEvents();
-    return res.data;
+    return data;
   };
 
   const updateEvent = async (id: string, payload: Partial<Event>) => {
-    await api.patch(`/events/${id}`, payload);
+    const { error: err } = await supabase.from('events').update(payload).eq('id', id);
+    if (err) throw err;
     await loadEvents();
   };
 
   const updateTeam = async (id: string, member_ids: string[]) => {
-    await api.patch(`/events/${id}/team`, { member_ids });
+    await supabase.from('event_team').delete().eq('event_id', id);
+    if (member_ids.length > 0) {
+      const rows = member_ids.map(mid => ({ event_id: id, team_member_id: mid }));
+      const { error: insErr } = await supabase.from('event_team').insert(rows);
+      if (insErr) throw insErr;
+    }
     await loadEvents();
   };
 
   const deleteEvent = async (id: string) => {
-    await api.delete(`/events/${id}`);
+    const { error: err } = await supabase.from('events').delete().eq('id', id);
+    if (err) throw err;
     await loadEvents();
   };
 
